@@ -5,6 +5,7 @@
 #define PLAYER_SPEED 5
 #define PLAYER_SIZE 64
 #define VECTOR2_ZERO (Vector2){0, 0}
+#define CELL_SIZE 128
 
 typedef struct Textures {
   Texture2D dirtTexture;
@@ -23,9 +24,9 @@ void DrawGameObject(GameObject gameObject, int playerX, int playerY,
   Rectangle sourceRect = {0, 0, gameObject.texture.width,
                           gameObject.texture.height};
   Rectangle destRect = {gameObject.rect.x - playerX + (int)(screenWidth / 2) -
-                            (int)(gameObject.texture.width / 2),
+                            (int)(gameObject.rect.width / 2),
                         gameObject.rect.y - playerY + (int)(screenHeight / 2) -
-                            (int)(gameObject.texture.height / 2),
+                            (int)(gameObject.rect.height / 2),
                         gameObject.rect.width, gameObject.rect.height};
 
   DrawTexturePro(gameObject.texture, sourceRect, destRect, VECTOR2_ZERO, 0.0f,
@@ -35,13 +36,17 @@ void DrawGameObject(GameObject gameObject, int playerX, int playerY,
 void DrawGameObjects(int playerX, int playerY, int screenWidth,
                      int screenHeight, Textures textures) {
 
-  GameObject bg[] = {(GameObject){.rect = {0, 0, 128, 128},
-                                  .texture = textures.dirtTexture,
-                                  .tint = WHITE},
+  GameObject bg[] = {
+      (GameObject){.rect = {0, 0, CELL_SIZE, CELL_SIZE},
+                   .texture = textures.dirtTexture,
+                   .tint = WHITE},
+      (GameObject){.rect = {CELL_SIZE * 4, 0, CELL_SIZE, CELL_SIZE},
+                   .texture = textures.dirtTexture,
+                   .tint = WHITE},
 
-                     (GameObject){.rect = {400, 0, PLAYER_SIZE, PLAYER_SIZE},
-                                  textures.playerTexture,
-                                  RED}};
+      (GameObject){.rect = {CELL_SIZE * 4, 0, PLAYER_SIZE, PLAYER_SIZE},
+                   textures.playerTexture,
+                   RED}};
 
   for (int i = 0; i < sizeof(bg) / sizeof(GameObject); i++) {
     DrawGameObject(bg[i], playerX, playerY, screenWidth, screenHeight);
@@ -54,7 +59,9 @@ void DrawGameWorld(int playerX, int playerY, Textures textures) {
 
   // Draw background
   DrawTexturePro(textures.grassTexture,
-                 (Rectangle){playerX, playerY, screenWidth, screenHeight},
+                 (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE / 2),
+                             playerY - (int)(screenHeight / 2 - CELL_SIZE / 2),
+                             screenWidth, screenHeight},
                  (Rectangle){0, 0, screenWidth, screenHeight}, VECTOR2_ZERO,
                  0.0f, GRASS_GREEN);
 
@@ -67,6 +74,7 @@ int main(void) {
   SetTargetFPS(60);
 
   SetWindowState(FLAG_WINDOW_RESIZABLE);
+  ToggleBorderlessWindowed();
 
   Textures textures;
   textures.dirtTexture = LoadTexture("textures/dirt.png");

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <raylib.h>
+#include <stdio.h>
 
 #define GRASS_GREEN (Color){127, 255, 127, 255}
 #define PLAYER_SPEED 5
@@ -11,6 +12,7 @@ typedef struct Textures {
   Texture2D dirtTexture;
   Texture2D grassTexture;
   Texture2D playerTexture;
+  Texture2D gridTexture;
 } Textures;
 
 typedef struct GameObject {
@@ -40,6 +42,18 @@ void DrawGameObjects(int playerX, int playerY, int screenWidth,
       (GameObject){.rect = {0, 0, CELL_SIZE, CELL_SIZE},
                    .texture = textures.dirtTexture,
                    .tint = WHITE},
+      (GameObject){
+          .rect = {CELL_SIZE * 0.5, CELL_SIZE * 0, CELL_SIZE, CELL_SIZE},
+          .texture = textures.dirtTexture,
+          .tint = WHITE},
+      (GameObject){
+          .rect = {CELL_SIZE * 0, CELL_SIZE * 0.5, CELL_SIZE, CELL_SIZE},
+          .texture = textures.dirtTexture,
+          .tint = WHITE},
+      (GameObject){
+          .rect = {CELL_SIZE * 0.5, CELL_SIZE * 0.5, CELL_SIZE, CELL_SIZE},
+          .texture = textures.dirtTexture,
+          .tint = WHITE},
       (GameObject){.rect = {CELL_SIZE * 4, 0, CELL_SIZE, CELL_SIZE},
                    .texture = textures.dirtTexture,
                    .tint = WHITE},
@@ -57,13 +71,19 @@ void DrawGameWorld(int playerX, int playerY, Textures textures) {
   const int screenWidth = GetScreenWidth();
   const int screenHeight = GetScreenHeight();
 
-  // Draw background
   DrawTexturePro(textures.grassTexture,
                  (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE / 2),
                              playerY - (int)(screenHeight / 2 - CELL_SIZE / 2),
                              screenWidth, screenHeight},
                  (Rectangle){0, 0, screenWidth, screenHeight}, VECTOR2_ZERO,
                  0.0f, GRASS_GREEN);
+  // DrawTexturePro(textures.gridTexture,
+  //                (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE /
+  //                2),
+  //                            playerY - (int)(screenHeight / 2 - CELL_SIZE /
+  //                            2), screenWidth, screenHeight},
+  //                (Rectangle){0, 0, screenWidth, screenHeight}, VECTOR2_ZERO,
+  //                0.0f, BLACK);
 
   // Draw other objects
   DrawGameObjects(playerX, playerY, screenWidth, screenHeight, textures);
@@ -74,12 +94,13 @@ int main(void) {
   SetTargetFPS(60);
 
   SetWindowState(FLAG_WINDOW_RESIZABLE);
-  ToggleBorderlessWindowed();
+  // ToggleBorderlessWindowed();
 
   Textures textures;
   textures.dirtTexture = LoadTexture("textures/dirt.png");
   textures.grassTexture = LoadTexture("textures/grass.png");
   textures.playerTexture = LoadTexture("textures/player.png");
+  textures.gridTexture = LoadTexture("textures/grid.png");
 
   int playerX = 0;
   int playerY = 0;
@@ -116,13 +137,22 @@ int main(void) {
     const Rectangle characterRectangle = {
         (int)(screenWidth / 2 - PLAYER_SIZE / 2),
         (int)(screenHeight / 2 - PLAYER_SIZE / 2), PLAYER_SIZE, PLAYER_SIZE};
+
     const Rectangle playerRectangle = {0, 0, textures.playerTexture.width,
                                        textures.playerTexture.height};
 
     DrawGameWorld(playerX, playerY, textures);
 
+    // DrawTexturePro(textures.playerTexture, playerRectangle,
+    // characterRectangle,
+    //                VECTOR2_ZERO, 0.0f, GetColor(0xaa77ffff));
     DrawTexturePro(textures.playerTexture, playerRectangle, characterRectangle,
-                   VECTOR2_ZERO, 0.0f, GetColor(0xaa77ffff));
+                   VECTOR2_ZERO, 0.0f, GetColor(0xffff00ff));
+
+    char posTBuffer[64];
+    sprintf(posTBuffer, "X: %d, Y: %d", playerX / (CELL_SIZE / 10),
+            playerY / (CELL_SIZE / 10));
+    DrawText(posTBuffer, 10, 10, 32, WHITE);
 
     EndDrawing();
   }

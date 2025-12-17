@@ -13,6 +13,7 @@ typedef struct Textures {
   Texture2D grassTexture;
   Texture2D playerTexture;
   Texture2D gridTexture;
+  Texture2D stoneTexture;
 } Textures;
 
 typedef struct GameObject {
@@ -40,19 +41,19 @@ void DrawGameObjects(int playerX, int playerY, int screenWidth,
 
   GameObject bg[] = {
       (GameObject){.rect = {0, 0, CELL_SIZE, CELL_SIZE},
-                   .texture = textures.dirtTexture,
+                   .texture = textures.stoneTexture,
                    .tint = WHITE},
       (GameObject){
           .rect = {CELL_SIZE * 0.5, CELL_SIZE * 0, CELL_SIZE, CELL_SIZE},
-          .texture = textures.dirtTexture,
+          .texture = textures.stoneTexture,
           .tint = WHITE},
       (GameObject){
           .rect = {CELL_SIZE * 0, CELL_SIZE * 0.5, CELL_SIZE, CELL_SIZE},
-          .texture = textures.dirtTexture,
+          .texture = textures.stoneTexture,
           .tint = WHITE},
       (GameObject){
           .rect = {CELL_SIZE * 0.5, CELL_SIZE * 0.5, CELL_SIZE, CELL_SIZE},
-          .texture = textures.dirtTexture,
+          .texture = textures.stoneTexture,
           .tint = WHITE},
       (GameObject){.rect = {CELL_SIZE * 4, 0, CELL_SIZE, CELL_SIZE},
                    .texture = textures.dirtTexture,
@@ -101,6 +102,7 @@ int main(void) {
   textures.grassTexture = LoadTexture("textures/grass.png");
   textures.playerTexture = LoadTexture("textures/player.png");
   textures.gridTexture = LoadTexture("textures/grid.png");
+  textures.stoneTexture = LoadTexture("textures/stone.png");
 
   int playerX = 0;
   int playerY = 0;

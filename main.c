@@ -72,13 +72,12 @@ void DrawGameWorld(int playerX, int playerY, Textures textures) {
   const int screenWidth = GetScreenWidth();
   const int screenHeight = GetScreenHeight();
 
-  // DrawTexturePro(textures.grassTexture,
-  //                (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE /
-  //                2),
-  //                            playerY - (int)(screenHeight / 2 - CELL_SIZE /
-  //                            2), screenWidth, screenHeight},
-  //                (Rectangle){0, 0, screenWidth, screenHeight}, VECTOR2_ZERO,
-  //                0.0f, GRASS_GREEN);
+  DrawTexturePro(textures.grassTexture,
+                 (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE / 2),
+                             playerY - (int)(screenHeight / 2 - CELL_SIZE / 2),
+                             screenWidth, screenHeight},
+                 (Rectangle){0, 0, screenWidth, screenHeight}, VECTOR2_ZERO,
+                 0.0f, GRASS_GREEN);
   // DrawTexturePro(textures.gridTexture,
   //                (Rectangle){playerX - (int)(screenWidth / 2 - CELL_SIZE /
   //                2),
